@@ -71,23 +71,28 @@ To find an approximate solution in R, we will need four things:
 time <- seq(from = 0, to = 50, by = 0.05)
 
 # Set some parameter values (these can change - keep it in mind) ----
-parameters <- c(r = .75, alpha = 0.8, beta = 0.5, q = 1)
+parameters <- c(r = 1.5, alpha = 0.5, beta = 0.8, q = 1)
 
 # Set the initial condition (prey and predator populations at t = 0) ----
 # Recall: V = prey, P = predator
-init_cond <- c(V = 10, P = 4)
+init_cond <- c(V = 10, P = 10)
 
 # Prepare the series of differential equations as a function ----
 lv_equations <- function(time, init_cond, parameters) {
   with(as.list(c(init_cond, parameters)), {
+    
     dVdt = r * V - alpha * V * P
     dPdt = beta * V * P - q * P
+    
     return(list(c(dVdt, dPdt)))
   })
 }
 
 # Find the approximate the solution using `deSolve::ode()` ----
-approx_lv <- ode(y = init_cond, times = time, func = lv_equations, parms = parameters)
+approx_lv <- ode(y = init_cond,
+                 times = time, 
+                 func = lv_equations, 
+                 parms = parameters)
 
 # Check the class ----
 class(approx_lv)
